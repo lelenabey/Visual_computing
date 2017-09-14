@@ -1,0 +1,29 @@
+I = rgb2gray(imread('book.jpg'));
+Ib = rgb2gray(imread('findBook.jpg'));
+
+[good_points, good_affine] = affine_t(I, Ib, 0.6);
+
+mmk = good_points';
+figure, imagesc(I), axis image, colormap(gray),hold on
+plot(mmk(2,:),mmk(3,:),'g.') ;
+hold off;
+figure, imagesc(Ib), axis image, colormap(gray),hold on
+plot(mmk(4,:),mmk(5,:),'g.') ;
+hold off;
+
+O = [];
+Op = [];
+for i = 1:size(matching_pointss, 1);
+    x1 = matching_pointss(i,2);
+    y1 = matching_pointss(i,3);
+    x2 = matching_pointss(i,4);
+    y2 = matching_pointss(i,5);
+
+    O(size(O,1)+1,:) = [x1 y1 0 0 1 0];
+    O(size(O,1)+1,:) = [0 0 x1 y1 0 1];
+
+    Op(size(Op,1)+1,:) = x2;
+    Op(size(Op,1)+1,:) = y2;
+end
+
+transform = O*affine;
